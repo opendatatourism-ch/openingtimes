@@ -1,11 +1,18 @@
 function myFunction(): void {
-    let elements = document.getElementsByName("osm");
-    console.log(document.getElementsByTagName('osm'));
+    const elements = document.querySelectorAll<HTMLElement>("#osm");
+    //let elements = (document.getElementsByName("osm") as HTMLCollectionOf<HTMLDivElement>);
+    console.log(elements);
     elements.forEach(element => {
-        (console.log(element.nodeValue));
+        (console.log(element.getAttribute("osmid")));
     });
 }
 
-console.log('Now');
+const osm = document.getElementsByName(
+    'osm'
+) as NodeListOf<HTMLElement>;
+
+const nodes = document.querySelectorAll<HTMLElement>("#osm");
+
+console.log(nodes);
 
 myFunction()

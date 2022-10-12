@@ -1,10 +1,13 @@
 "use strict";
 function myFunction() {
-    let elements = document.getElementsByName("osm");
-    console.log(document.getElementsByTagName('osm'));
+    const elements = document.querySelectorAll("#osm");
+    //let elements = (document.getElementsByName("osm") as HTMLCollectionOf<HTMLDivElement>);
+    console.log(elements);
     elements.forEach(element => {
-        (console.log(element.nodeValue));
+        (console.log(element.getAttribute("osmid")));
     });
 }
-console.log('Now');
+const osm = document.getElementsByName('osm');
+const nodes = document.querySelectorAll("#osm");
+console.log(nodes);
 myFunction();
