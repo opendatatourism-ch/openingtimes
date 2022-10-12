@@ -85,8 +85,8 @@ function renderLinkIcon(is_open) {
 
   iconSvg.appendChild(iconPath);
   var elements = document.getElementById("osm");
-  elements.appendChild(iconSvg);
-  return elements.appendChild(iconSvg);
+  elements.prepend(iconSvg);
+  return elements.prepend(iconSvg);
 }
 
 //renderLinkIcon(elements);
