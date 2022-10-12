@@ -3,7 +3,7 @@ console.log(elements.getAttribute("osmid"));
 var osmid = elements.getAttribute("osmid");
 
 var url =
-  "https://overpass-api.de/api/interpreter?data=%5Bout%3Ajson%5D%3B%0A%28%0A%20%20" +
+  "https://overpass.osm.ch/api/interpreter?data=%5Bout%3Ajson%5D%3B%0A%28%0A%20%20" +
   osmid +
   "%3B%0A%29%3B%0Aout%20tags%3B";
 fetch(url)
@@ -95,7 +95,7 @@ function renderLinkIcon(is_open) {
 
 function render(data){
   console.log(data["elements"][0]["tags"]["name"]);
-  const name = document.createElement('p');
+  const name = document.createElement('span');
   name.textContent = data["elements"][0]["tags"]["name"];
   var elements = document.getElementById("osm");
   elements.appendChild(name);
