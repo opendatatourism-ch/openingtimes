@@ -10,13 +10,14 @@ fetch(url)
   .then((response) => response.json())
   .then((data) => render(data))
   .then((value) => getOpen(value))
-  .then((value) => renderLinkIcon());
+  .then((value) => renderLinkIcon(value));
 
 function getOpen(data) {
   let locale = navigator.language;
   let oh = new opening_hours(data, {}, { locale: locale });
 
   var is_open = oh.getState();
+  console.log(is_open);
   return Promise.resolve(is_open);
 }
 // Input string (English and German mixed).
