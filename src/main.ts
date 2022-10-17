@@ -7,12 +7,35 @@ function myFunction(): void {
     });
 }
 
-const osm = document.getElementsByName(
+/*const osm = document.getElementsByName(
     'osm'
 ) as NodeListOf<HTMLElement>;
 
 const nodes = document.querySelectorAll<HTMLElement>("#osm");
 
-console.log(nodes);
+console.log("Get Nodes");
+nodes.forEach(element => {
+    console.log(element.getAttribute("osmid"));
+});
+*/
 
-myFunction()
+
+//myFunction()
+
+class Main {
+    nodes: NodeListOf<HTMLElement>;
+    constructor() {
+        this.nodes = document.querySelectorAll<HTMLElement>("#osm");
+        this.getNodes();
+    }
+
+    getNodes(){
+        console.log("Get Nodes");
+        this.nodes.forEach(element => {
+            console.log(element.getAttribute("osmid")+" - "+element.getAttribute("icon"));
+        });
+    }
+    
+}
+
+let main = new Main();

@@ -8,7 +8,7 @@ var url =
   "%3B%0A%29%3B%0Aout%20tags%3B";
 fetch(url)
   .then((response) => response.json())
-  .then((data) => render(data))
+  .then((data) => renderElement(data))
   .then((value) => getOpen(value))
   .then((value) => renderLinkIcon(value));
 
@@ -94,7 +94,7 @@ function renderLinkIcon(is_open) {
 
 //elements.appendChild(svg);
 
-function render(data){
+function renderElement(data){
   console.log(data["elements"][0]["tags"]["name"]);
   const name = document.createElement('span');
   name.textContent = data["elements"][0]["tags"]["name"];
