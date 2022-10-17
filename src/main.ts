@@ -1,35 +1,26 @@
-function myFunction(): void {
-    const elements = document.querySelectorAll<HTMLElement>("#osm");
-    //let elements = (document.getElementsByName("osm") as HTMLCollectionOf<HTMLDivElement>);
-    console.log(elements);
-    elements.forEach(element => {
-        (console.log(element.getAttribute("osmid")));
-    });
-}
-
-/*const osm = document.getElementsByName(
-    'osm'
-) as NodeListOf<HTMLElement>;
-
-const nodes = document.querySelectorAll<HTMLElement>("#osm");
-
-console.log("Get Nodes");
-nodes.forEach(element => {
-    console.log(element.getAttribute("osmid"));
-});
-*/
-
-
-//myFunction()
+interface OsmElement {
+    type: string;
+    id: number;
+    tags: {
+        name: string;
+        opening_hours: string;
+    }
+    
+  }
 
 class Main {
     nodes: NodeListOf<HTMLElement>;
-    overpassturbo!: string;
+    overpassturboUrl: string;
+    overpassturboElements!: OsmElement[];
 
     constructor() {
         this.nodes = document.querySelectorAll<HTMLElement>("#osm");
         this.getNodes();
-        this.getOsmElement();
+        this.overpassturboUrl = this.getOsmElement();
+        console.log("overpass URL");
+        console.log(this.overpassturboUrl);
+        console.log("Fetch Overpass - constructor");
+        this.fetchOverpassJson();
     }
 
     getNodes(){
@@ -39,15 +30,34 @@ class Main {
         });
     }
 
-    getOsmElement(){
+    getOsmElement(): string{
+        console.log("Start OSM Elements");
         var url = "https://overpass.osm.ch/api/interpreter?data=[out:json];(";
         this.nodes.forEach(element => {
             url += element.getAttribute("osmid")+";"; 
         });
         url += ");out tags;";
-        this.overpassturbo = url;
-        console.log(url);
-        console.log(this.overpassturbo);
+        this.overpassturboUrl = url;
+        return url
+    }
+
+    fetchOverpassJson(){
+        console.log("Fetch Overpass - Method");
+        fetch(this.overpassturboUrl)
+        .then((response) => response.json())
+        .then((data) => this.overpassturboElements = data['elements'])
+        .then(() => this.getOverpassJson());
+    }
+
+    getOverpassJson(){
+        console.log("Response Overpass");
+        console.log(this.overpassturboElements);
+        this.overpassturboElements.forEach(data => {
+            console.log(data['type']);
+            console.log(data['id']);
+            console.log(data['tags']['name']);
+            console.log(data['tags']['opening_hours']);
+        });
     }
 }
 
