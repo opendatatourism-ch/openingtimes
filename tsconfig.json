@@ -30,7 +30,7 @@
     // "moduleResolution": "node",                       /* Specify how TypeScript looks up a file from a given module specifier. */
     "baseUrl": "./",                                      /* Specify the base directory to resolve non-relative module names. */
     "paths": {                                           /* Specify a set of entries that re-map imports to additional lookup locations. */
-        "opening_hours": ["node_modules/opening_hours/types/"] // This mapping is relative to "baseUrl"
+        "opening_hours": ["node_modules/opening_hours/types/index.d.ts"] // This mapping is relative to "baseUrl"
     },                                      
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
     // "typeRoots": [],                                  /* Specify multiple folders that act like './node_modules/@types'. */

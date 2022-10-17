@@ -1,9 +1,18 @@
 "use strict";
+class OsmElement {
+    constructor(type, id, name, opening_hours) {
+        this.index = type + "(" + id + ")";
+        this.type = type;
+        this.id = id;
+        this.name = name;
+        this.opening_hours = opening_hours;
+    }
+}
 class Main {
     constructor() {
         this.nodes = document.querySelectorAll("#osm");
         this.getNodes();
-        this.overpassturboUrl = this.getOsmElement();
+        this.overpassturboUrl = this.getOverpassUrl();
         console.log("overpass URL");
         console.log(this.overpassturboUrl);
         console.log("Fetch Overpass - constructor");
@@ -15,7 +24,7 @@ class Main {
             console.log(element.getAttribute("osmid") + " - " + element.getAttribute("icon"));
         });
     }
-    getOsmElement() {
+    getOverpassUrl() {
         console.log("Start OSM Elements");
         var url = "https://overpass.osm.ch/api/interpreter?data=[out:json];(";
         this.nodes.forEach((element) => {
@@ -36,11 +45,51 @@ class Main {
         console.log("Response Overpass");
         console.log(this.overpassturboElements);
         this.overpassturboElements.forEach((data) => {
+            console.log(data["index"]);
             console.log(data["type"]);
             console.log(data["id"]);
             console.log(data["tags"]["name"]);
             console.log(data["tags"]["opening_hours"]);
+            console.log(data);
         });
+    }
+    renderObjects() {
+        let i = 0;
+        console.log("Render Objects");
+        this.nodes.forEach((element) => {
+            console.log(i);
+            console.log(element.getAttribute("osmid"));
+            let osmidAttribut = element.getAttribute("osmid");
+            let splitString = osmidAttribut === null || osmidAttribut === void 0 ? void 0 : osmidAttribut.split("(");
+            if (splitString != null) {
+                let osmtype = splitString[0];
+                let osmid = Number(splitString[1].slice(0, -1));
+                /*var object = this.getOsmElementbyTypeId(osmtype, osmid);
+                const name = document.createElement("span");
+                name.textContent = object["tags"]["name"];
+                const id = object["type"] + "(" + object["id"] + ")";
+                const htmlElement = document.querySelector('[osmid*="' + id + '"]');
+                if (htmlElement != null) {
+                    htmlElement.appendChild(name);
+                }*/
+            }
+            i++;
+        });
+    }
+    getOsmElementbyTypeId(type, id) {
+        let i = 0;
+        let index = null;
+        //let element:OsmElement;
+        this.overpassturboElements.forEach((data) => {
+            if (data["type"] == type && data["id"] == id) {
+                //element = this.overpassturboElements[i];
+                index = i;
+            }
+            i++;
+        });
+        if (index != null) {
+            return index;
+        }
     }
 }
 let main = new Main();
