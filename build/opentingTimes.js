@@ -1,17 +1,8 @@
 "use strict";
-class OsmElement {
-    constructor(type, id, name, opening_hours) {
-        this.index = type + "(" + id + ")";
-        this.type = type;
-        this.id = id;
-        this.name = name;
-        this.opening_hours = opening_hours;
-    }
-}
-class Main {
+class OpenstreetmapElement {
     constructor() {
-        this.nodes = document.querySelectorAll("#osm");
-        this.getNodes();
+        this.nodes = document.querySelectorAll("#openingTimes");
+        this.getNodes(); // Console.log
         this.overpassturboUrl = this.getOverpassUrl();
         console.log("overpass URL");
         console.log(this.overpassturboUrl);
@@ -21,14 +12,14 @@ class Main {
     getNodes() {
         console.log("Get Nodes");
         this.nodes.forEach((element) => {
-            console.log(element.getAttribute("osmid") + " - " + element.getAttribute("icon"));
+            console.log(element.getAttribute("data-osmid") + " - " + element.getAttribute("data-icon"));
         });
     }
     getOverpassUrl() {
         console.log("Start OSM Elements");
         var url = "https://overpass.osm.ch/api/interpreter?data=[out:json];(";
         this.nodes.forEach((element) => {
-            url += element.getAttribute("osmid") + ";";
+            url += element.getAttribute("data-osmid") + ";";
         });
         url += ");out tags;";
         this.overpassturboUrl = url;
@@ -45,54 +36,50 @@ class Main {
         console.log("Response Overpass");
         console.log(this.overpassturboElements);
         this.overpassturboElements.forEach((data) => {
-            console.log(data["index"]);
             console.log(data["type"]);
             console.log(data["id"]);
             console.log(data["tags"]["name"]);
             console.log(data["tags"]["opening_hours"]);
             console.log(data);
         });
+        this.renderObjects();
     }
     renderObjects() {
         let i = 0;
         console.log("Render Objects");
         this.nodes.forEach((element) => {
             console.log(i);
-            console.log(element.getAttribute("osmid"));
-            let osmidAttribut = element.getAttribute("osmid");
+            console.log(element.getAttribute("data-osmid"));
+            console.log(element);
+            let osmidAttribut = element.getAttribute("data-osmid");
             let splitString = osmidAttribut === null || osmidAttribut === void 0 ? void 0 : osmidAttribut.split("(");
             if (splitString != null) {
                 let osmtype = splitString[0];
                 let osmid = Number(splitString[1].slice(0, -1));
-                /*var object = this.getOsmElementbyTypeId(osmtype, osmid);
-                const name = document.createElement("span");
-                name.textContent = object["tags"]["name"];
-                const id = object["type"] + "(" + object["id"] + ")";
-                const htmlElement = document.querySelector('[osmid*="' + id + '"]');
-                if (htmlElement != null) {
-                    htmlElement.appendChild(name);
-                }*/
+                var object = this.getOsmElementbyTypeId(osmtype, osmid);
+                console.log("Objekt");
+                console.log(object);
+                if (object != null) {
+                    const name = document.createElement("span");
+                    name.textContent = object["tags"]["name"];
+                    const id = object["type"] + "(" + object["id"] + ")";
+                    element.appendChild(name);
+                    element.setAttribute("data-opening_hours", object["tags"]["opening_hours"]);
+                }
             }
             i++;
         });
+    }
+    getOsmElementIndexbyTypeId(type, id) {
+        const index = this.overpassturboElements.findIndex(el => el.id === id && el.type === type);
+        return index;
     }
     getOsmElementbyTypeId(type, id) {
-        let i = 0;
-        let index = null;
-        //let element:OsmElement;
-        this.overpassturboElements.forEach((data) => {
-            if (data["type"] == type && data["id"] == id) {
-                //element = this.overpassturboElements[i];
-                index = i;
-            }
-            i++;
-        });
-        if (index != null) {
-            return index;
-        }
+        const elment = this.overpassturboElements.find(el => el.id === id && el.type === type);
+        return elment;
     }
 }
-let main = new Main();
+let openstreetmapElement = new OpenstreetmapElement();
 class Render {
     constructor() {
         console.log("Render.js");

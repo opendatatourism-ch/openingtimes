@@ -1,4 +1,4 @@
-var elements = document.getElementById("osm");
+var elements = document.getElementById("sm");
 console.log(elements.getAttribute("osmid"));
 var osmid = elements.getAttribute("osmid");
 
