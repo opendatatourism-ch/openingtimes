@@ -54,6 +54,15 @@ class OpenstreetmapElement {
                         this.setIcon(element, iconAttribut);
                     }
                     this.setText(element, object["tags"]["name"]);
+                    let layoutAttribut = element.getAttribute("data-layout");
+                    console.log(layoutAttribut);
+                    if (layoutAttribut != null) {
+                        this.setLayout(
+                            element,
+                            layoutAttribut,
+                            object["tags"]["opening_hours"]
+                        );
+                    }
                 }
             }
         });
@@ -162,5 +171,30 @@ class OpenstreetmapElement {
 
         iconSvg.appendChild(iconPath);
         element.appendChild(iconSvg);
+    }
+
+    setLayout(element: HTMLElement, code: string, openingHours: string) {
+        switch (code) {
+            case "long":
+                this.setOpeningHours(element, openingHours);
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    setOpeningHours(element: HTMLElement, openingHours: string) {
+        const div = document.createElement("div");
+        element.appendChild(div);
+        const span = document.createElement("span");
+        span.textContent = "Montag 09:00-12:00 13:30-17:00";
+        element.appendChild(span);
+        let locale = navigator.language;
+        // @ts-ignore
+        let oh = new opening_hours(openingHours, {}, { locale: locale });
+        let it = oh.getIterator();
+        // @ts-ignore
+        div.innerHTML += OpeningHoursTable.drawTableAndComments(oh, it);
     }
 }
