@@ -9,17 +9,28 @@
     <title>Test Opening Times</title>
     <script src="https://openingh.openstreetmap.de/opening_hours.js/opening_hours+deps.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.13.0/system.min.js" integrity="sha512-Yt9xiHZgPuo/cAJKrKCwSG5jQivTcInaav5OfcMwF1wPo06Q7OGog4uwmRPn7R2/a8xOdYB1bmgUkI3ZdI/sdQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        .openingTimes {
+            padding: 0px;
+        }
+        .openingTimes svg{
+            padding: 5px;
+        }
+        .openingTimes span{
+            vertical-align: middle;
+        }
+    </style>
 </head>
 
 <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <!-- Example -->
     <h2>Examples</h2>
-    <div id="openingTimes" data-osmid="node(5415702672)"></div>
-    <div id="openingTimes" data-osmid="node(5415702672)" data-icon="bed" data-layout="short"></div>
-    <div id="openingTimes" data-osmid="node(5415702672)" data-icon="company" data-layout="long"></div>
-    <div id="openingTimes" data-osmid="way(131605934)" data-icon="library"></div>
-    <div id="openingTimes" data-osmid="relation(1859930)" data-icon="train"></div>
+    <div class="openingTimes" data-osmid="node(5415702672)"></div>
+    <div class="openingTimes" data-osmid="node(5415702672)" data-icon="bed" data-layout="short"></div>
+    <div class="openingTimes" data-osmid="node(5415702672)" data-icon="company" data-layout="long"></div>
+    <div class="openingTimes" data-osmid="way(131605934)" data-icon="library"></div>
+    <div class="openingTimes" data-osmid="relation(1859930)"></div>
 
     <h2>Example Code</h2>
     <div>

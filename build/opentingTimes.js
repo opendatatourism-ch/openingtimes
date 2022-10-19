@@ -1,18 +1,9 @@
 "use strict";
 class OpenstreetmapElement {
     constructor() {
-        this.nodes = document.querySelectorAll("#openingTimes");
-        //this.getNodes(); // Console.log
+        this.nodes = document.querySelectorAll(".openingTimes");
         this.overpassturboUrl = this.getOverpassUrl();
         this.fetchOverpassJson();
-    }
-    getNodes() {
-        console.log("Get Nodes");
-        this.nodes.forEach((element) => {
-            console.log(element.getAttribute("data-osmid") +
-                " - " +
-                element.getAttribute("data-icon"));
-        });
     }
     getOverpassUrl() {
         var url = "https://overpass.osm.ch/api/interpreter?data=[out:json];(";
@@ -29,20 +20,7 @@ class OpenstreetmapElement {
             .then((data) => (this.overpassturboElements = data["elements"]))
             .then(() => this.renderObjects());
     }
-    getOverpassJson() {
-        console.log("Response Overpass");
-        console.log(this.overpassturboElements);
-        this.overpassturboElements.forEach((data) => {
-            console.log(data["type"]);
-            console.log(data["id"]);
-            console.log(data["tags"]["name"]);
-            console.log(data["tags"]["opening_hours"]);
-            console.log(data);
-        });
-        this.renderObjects();
-    }
     renderObjects() {
-        let i = 0;
         console.log("Render Objects");
         this.nodes.forEach((element) => {
             let osmidAttribut = element.getAttribute("data-osmid");
@@ -52,34 +30,38 @@ class OpenstreetmapElement {
                 let osmid = Number(splitString[1].slice(0, -1));
                 var object = this.getOsmElementbyTypeId(osmtype, osmid);
                 if (object != null) {
-                    const name = document.createElement("span");
-                    name.textContent = object["tags"]["name"];
-                    const id = object["type"] + "(" + object["id"] + ")";
-                    element.appendChild(name);
-                    element.setAttribute("data-opening_hours", object["tags"]["opening_hours"]);
                     let is_open = this.getOpen(object["tags"]["opening_hours"]);
-                    element.setAttribute("data-is_open", is_open);
+                    this.setAttributes(element, object, is_open);
                     this.setOpenIcon(element, is_open);
+                    let iconAttribut = element.getAttribute("data-icon");
+                    console.log(iconAttribut);
+                    if (iconAttribut != null) {
+                        this.setIcon(element, iconAttribut);
+                    }
+                    this.setText(element, object["tags"]["name"]);
                 }
             }
-            i++;
         });
     }
-    getOsmElementIndexbyTypeId(type, id) {
-        const index = this.overpassturboElements.findIndex((el) => el.id === id && el.type === type);
-        return index;
-    }
     getOsmElementbyTypeId(type, id) {
-        const elment = this.overpassturboElements.find((el) => el.id === id && el.type === type);
-        return elment;
+        const element = this.overpassturboElements.find((el) => el.id === id && el.type === type);
+        return element;
     }
     getOpen(value) {
         let locale = navigator.language;
         // @ts-ignore
         let oh = new opening_hours(value, {}, { locale: locale });
         var is_open = oh.getState();
-        console.log(is_open);
         return is_open;
+    }
+    setAttributes(element, object, is_open) {
+        element.setAttribute("data-opening_hours", object["tags"]["opening_hours"]);
+        element.setAttribute("data-is_open", is_open);
+    }
+    setText(element, name) {
+        const span = document.createElement("span");
+        span.textContent = name;
+        element.appendChild(span);
     }
     setOpenIcon(element, open) {
         const iconSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -103,6 +85,37 @@ class OpenstreetmapElement {
         iconPath.setAttribute("d", icon);
         iconSvg.appendChild(iconPath);
         element.prepend(iconSvg);
+    }
+    setIcon(element, code) {
+        const iconSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        const iconPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        let icon = "M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm0 18.25c-.69 0-1.25-.56-1.25-1.25s.56-1.25 1.25-1.25c.691 0 1.25.56 1.25 1.25s-.559 1.25-1.25 1.25zm1.961-5.928c-.904.975-.947 1.514-.935 2.178h-2.005c-.007-1.475.02-2.125 1.431-3.468.573-.544 1.025-.975.962-1.821-.058-.805-.73-1.226-1.365-1.226-.709 0-1.538.527-1.538 2.013h-2.01c0-2.4 1.409-3.95 3.59-3.95 1.036 0 1.942.339 2.55.955.57.578.865 1.372.854 2.298-.016 1.383-.857 2.291-1.534 3.021z";
+        switch (code) {
+            case "bed":
+                icon =
+                    "M24 19v-7h-23v-7h-1v14h1v-2h22v2h1zm-20-12c1.104 0 2 .896 2 2s-.896 2-2 2-2-.896-2-2 .896-2 2-2zm19 4c0-1.657-1.343-3-3-3h-13v3h16z";
+                break;
+            case "company":
+                icon =
+                    "M1 22h2v-22h18v22h2v2h-22v-2zm7-3v4h3v-4h-3zm5 0v4h3v-4h-3zm-6-5h-2v2h2v-2zm8 0h-2v2h2v-2zm-4 0h-2v2h2v-2zm8 0h-2v2h2v-2zm-12-4h-2v2h2v-2zm8 0h-2v2h2v-2zm-4 0h-2v2h2v-2zm8 0h-2v2h2v-2zm-12-4h-2v2h2v-2zm8 0h-2v2h2v-2zm-4 0h-2v2h2v-2zm8 0h-2v2h2v-2zm-12-4h-2v2h2v-2zm8 0h-2v2h2v-2zm-4 0h-2v2h2v-2zm8 0h-2v2h2v-2z";
+                break;
+            case "library":
+                icon =
+                    "M22 24h-17c-1.657 0-3-1.343-3-3v-18c0-1.657 1.343-3 3-3h17v24zm-2-4h-14.505c-1.375 0-1.375 2 0 2h14.505v-2zm-3-15h-10v3h10v-3z";
+                break;
+            case "train":
+                icon =
+                    "M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-1.25 17.292l-4.5-4.364 1.857-1.858 2.643 2.506 5.643-5.784 1.857 1.857-7.5 7.643z";
+                break;
+            default:
+                break;
+        }
+        iconSvg.setAttribute("width", "24");
+        iconSvg.setAttribute("height", "24");
+        iconSvg.setAttribute("viewBox", "0 0 24 24");
+        iconPath.setAttribute("d", icon);
+        iconSvg.appendChild(iconPath);
+        element.appendChild(iconSvg);
     }
 }
 class Render {
