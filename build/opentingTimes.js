@@ -54,8 +54,13 @@ class OpenstreetmapElement {
     }
     getOpen(value) {
         let locale = navigator.language;
+        console.log(locale);
+        let lat = "47,4134074";
+        let lon = "9,3479842";
+        let country_code = "ch";
+        let state = "ar";
         // @ts-ignore
-        let oh = new opening_hours(value, {}, { locale: locale });
+        let oh = new opening_hours(value, { lat, lon, address: { country_code, state } }, { locale: locale });
         var is_open = oh.getState();
         return is_open;
     }
@@ -134,12 +139,16 @@ class OpenstreetmapElement {
     setOpeningHours(element, openingHours) {
         const div = document.createElement("div");
         element.appendChild(div);
-        const span = document.createElement("span");
+        /*const span = document.createElement("span");
         span.textContent = "Montag 09:00-12:00 13:30-17:00";
-        element.appendChild(span);
+        element.appendChild(span);*/
         let locale = navigator.language;
+        let lat = "47,4134074";
+        let lon = "9,3479842";
+        let country_code = "ch";
+        let state = "ar";
         // @ts-ignore
-        let oh = new opening_hours(openingHours, {}, { locale: locale });
+        let oh = new opening_hours(openingHours, { lat, lon, address: { country_code, state } }, { locale: locale });
         let it = oh.getIterator();
         // @ts-ignore
         div.innerHTML += OpeningHoursTable.drawTableAndComments(oh, it);
