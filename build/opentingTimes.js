@@ -146,7 +146,7 @@ class OpenstreetmapElement {
         let lat = "47,4134074";
         let lon = "9,3479842";
         let country_code = "ch";
-        let state = "ar";
+        let state = "Sankt Gallen";
         // @ts-ignore
         let oh = new opening_hours(openingHours, { lat, lon, address: { country_code, state } }, { locale: locale });
         let it = oh.getIterator();
